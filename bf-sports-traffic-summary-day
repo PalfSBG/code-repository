@@ -1,0 +1,25 @@
+SELECT
+    event_date,
+    COUNT(DISTINCT(user_pseudo_id)) AS unique_visitors,
+    COUNT(DISTINCT(
+        CASE
+            WHEN account_id IS NOT NULL
+            AND account_id > 0
+            THEN account_id
+        END))                                                             AS logged_in_users,
+    COUNT(DISTINCT(user_pseudo_id || event_param_ga_session_id || brand)) AS total_visits,
+    COUNT(DISTINCT(
+        CASE
+            WHEN account_id IS NOT NULL
+            AND account_id > 0
+            THEN (user_pseudo_id || event_param_ga_session_id || brand)
+        END)) AS total_logged_in_visits
+FROM
+    omni_ga.vw_bf_events_60_days AS bf_ga4
+WHERE
+    event_param_vertical IN ('rebuild_sportsbook',
+                             'sportsbook')
+GROUP BY
+    event_date
+ORDER BY
+    event_date ASC
