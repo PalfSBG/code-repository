@@ -1,0 +1,12 @@
+SELECT
+    event_date,
+    COUNT(DISTINCT(user_pseudo_id || event_param_ga_session_id || brand)) AS total_visits
+    FROM
+    omni_ga.vw_bf_events_60_days AS bf_ga4
+WHERE
+    event_param_vertical IN ('rebuild_sportsbook',
+                             'sportsbook')
+GROUP BY
+    event_date
+ORDER BY
+    event_date ASC
